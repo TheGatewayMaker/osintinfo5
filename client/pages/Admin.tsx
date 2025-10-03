@@ -10,6 +10,9 @@ import {
   doc,
   updateDoc,
   increment,
+  where,
+  getDocs,
+  limit as fblimit,
 } from "firebase/firestore";
 import type { UserProfile } from "@/lib/user";
 import { Button } from "@/components/ui/button";
