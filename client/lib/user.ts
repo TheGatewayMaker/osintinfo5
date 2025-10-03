@@ -42,6 +42,7 @@ export async function ensureUserDoc(
       uid,
       email,
       name,
+      role: "user",
       uniquePurchaseId,
       freeSearches: 3,
       purchasedSearches: 0,
