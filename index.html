@@ -7,6 +7,12 @@
   </head>
 
   <body>
+    <script>
+      (function(){
+        const d = document.documentElement;
+        if (!d.classList.contains('dark')) d.classList.add('dark');
+      })();
+    </script>
     <div id="root"></div>
 
     <script type="module" src="/client/App.tsx"></script>
