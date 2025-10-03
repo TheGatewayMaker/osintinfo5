@@ -10,6 +10,9 @@ import {
   doc,
   updateDoc,
   increment,
+  where,
+  getDocs,
+  limit as fblimit,
 } from "firebase/firestore";
 import type { UserProfile } from "@/lib/user";
 import { Button } from "@/components/ui/button";
@@ -21,6 +24,13 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -105,6 +115,8 @@ export default function Admin() {
           <StatCard title="Remaining" value={stats.remaining} />
         </div>
 
+        <AssignByPurchaseId />
+
         <div className="mt-8 rounded-2xl border border-border bg-card/80 p-4 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
           <UsersTable users={users} />
         </div>
@@ -118,6 +130,180 @@ function StatCard({ title, value }: { title: string; value: number }) {
     <div className="rounded-xl border border-border bg-card/80 p-5 text-center shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10">
       <div className="text-sm text-foreground/70">{title}</div>
       <div className="mt-1 text-2xl font-black">{value}</div>
+    </div>
+  );
+}
+
+function AssignByPurchaseId() {
+  const [purchaseId, setPurchaseId] = useState("");
+  const [amount, setAmount] = useState<number>(10);
+  const [action, setAction] = useState<"add" | "deduct" | "set">("add");
+  const [found, setFound] = useState<UserProfile | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<string>("");
+
+  async function lookup() {
+    setStatus("");
+    setFound(null);
+    if (!purchaseId.trim()) return;
+    try {
+      setLoading(true);
+      const db = getDbInstance();
+      const q = query(
+        collection(db, "users"),
+        where("uniquePurchaseId", "==", purchaseId.trim()),
+        fblimit(1),
+      );
+      const snap = await getDocs(q);
+      if (!snap.empty) {
+        const d = snap.docs[0];
+        setFound({ id: d.id, ...(d.data() as any) } as UserProfile);
+        setStatus("");
+      } else {
+        setStatus("No user found for this Purchase ID.");
+      }
+    } catch (e) {
+      console.error(e);
+      setStatus("Lookup failed.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function apply() {
+    if (!found) return;
+    setLoading(true);
+    setStatus("");
+    try {
+      const db = getDbInstance();
+      const ref = doc(db, "users", found.uid);
+      if (action === "add") {
+        const newRemaining = (found.totalSearchesRemaining ?? 0) + amount;
+        await updateDoc(ref, {
+          purchasedSearches: increment(amount),
+          totalSearchesRemaining: newRemaining,
+        });
+        setStatus("Searches added.");
+      } else if (action === "deduct") {
+        const newRemaining = Math.max(
+          0,
+          (found.totalSearchesRemaining ?? 0) - amount,
+        );
+        await updateDoc(ref, {
+          usedSearches: increment(amount),
+          totalSearchesRemaining: newRemaining,
+        });
+        setStatus("Searches deducted.");
+      } else if (action === "set") {
+        const current = found.totalSearchesRemaining ?? 0;
+        const delta = amount - current;
+        if (delta > 0) {
+          await updateDoc(ref, {
+            purchasedSearches: increment(delta),
+            totalSearchesRemaining: amount,
+          });
+        } else if (delta < 0) {
+          await updateDoc(ref, {
+            usedSearches: increment(-delta),
+            totalSearchesRemaining: amount,
+          });
+        } else {
+          // equal, nothing to change
+        }
+        setStatus("Search limit set.");
+      }
+      await lookup();
+    } catch (e) {
+      console.error(e);
+      setStatus("Update failed.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <div className="mt-8 rounded-2xl border border-border bg-card/80 p-4 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
+      <h2 className="text-lg font-bold">Assign by Unique Purchase ID</h2>
+      <p className="text-sm text-foreground/70 mt-1">
+        Enter a user's Unique Purchase ID to add, deduct, or set their search
+        limit.
+      </p>
+      <div className="mt-4 grid gap-3 md:grid-cols-5">
+        <div className="md:col-span-2">
+          <label className="text-sm">Purchase ID</label>
+          <Input
+            placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+            value={purchaseId}
+            onChange={(e) => setPurchaseId(e.target.value)}
+            onBlur={lookup}
+          />
+        </div>
+        <div>
+          <label className="text-sm">Action</label>
+          <Select value={action} onValueChange={(v) => setAction(v as any)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select action" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="add">Add</SelectItem>
+              <SelectItem value="deduct">Deduct</SelectItem>
+              <SelectItem value="set">Set Limit</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <label className="text-sm">Amount</label>
+          <Input
+            type="number"
+            min={0}
+            value={amount}
+            onChange={(e) => setAmount(parseInt(e.target.value || "0", 10))}
+          />
+        </div>
+        <div className="flex items-end">
+          <Button
+            onClick={apply}
+            disabled={loading || !found}
+            className="w-full"
+          >
+            {loading ? "Working..." : "Apply"}
+          </Button>
+        </div>
+      </div>
+
+      {status && <p className="mt-3 text-sm text-foreground/70">{status}</p>}
+
+      {found && (
+        <div className="mt-4 grid gap-2 text-sm">
+          <div className="font-medium">Matched User</div>
+          <div className="grid md:grid-cols-5 gap-2">
+            <div>
+              <div className="text-foreground/60">Name</div>
+              <div>{found.name ?? "-"}</div>
+            </div>
+            <div>
+              <div className="text-foreground/60">Email</div>
+              <div>{found.email ?? "-"}</div>
+            </div>
+            <div>
+              <div className="text-foreground/60">Purchase ID</div>
+              <div className="font-mono text-xs break-all">
+                {found.uniquePurchaseId}
+              </div>
+            </div>
+            <div>
+              <div className="text-foreground/60">Purchased</div>
+              <div>{found.purchasedSearches ?? 0}</div>
+            </div>
+            <div>
+              <div className="text-foreground/60">Remaining</div>
+              <div className="font-bold">
+                {found.totalSearchesRemaining ?? 0}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

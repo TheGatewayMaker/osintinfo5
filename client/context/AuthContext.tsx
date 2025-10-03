@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { getAuthInstance, getGoogleProvider } from "@/lib/firebase";
+import {
+  getAuthInstance,
+  getGoogleProvider,
+  getDbInstance,
+} from "@/lib/firebase";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
@@ -9,6 +13,7 @@ import {
   updateProfile,
   User,
 } from "firebase/auth";
+import { doc, onSnapshot } from "firebase/firestore";
 import { ensureUserDoc, UserProfile } from "@/lib/user";
 
 type AuthContextType = {
@@ -29,27 +34,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let unsub: (() => void) | undefined;
+    let unsubAuth: (() => void) | undefined;
+    let unsubProfile: (() => void) | undefined;
     try {
       const _auth = getAuthInstance();
-      unsub = onAuthStateChanged(_auth, async (u) => {
+      unsubAuth = onAuthStateChanged(_auth, async (u) => {
         setUser(u);
+        if (unsubProfile) {
+          unsubProfile();
+          unsubProfile = undefined;
+        }
         if (u) {
-          const p = await ensureUserDoc(u.uid, u.email, u.displayName);
-          setProfile(p);
+          const ensured = await ensureUserDoc(u.uid, u.email, u.displayName);
+          setProfile(ensured);
+          try {
+            const db = getDbInstance();
+            const ref = doc(db, "users", u.uid);
+            unsubProfile = onSnapshot(ref, (snap) => {
+              if (snap.exists()) {
+                setProfile(snap.data() as UserProfile);
+              }
+            });
+          } catch (e) {
+            console.warn("Profile realtime disabled: ", e);
+          }
         } else {
           setProfile(null);
         }
         setLoading(false);
       });
     } catch (e) {
-      // Firebase not configured; keep app usable in read-only mode
       console.warn("Auth disabled: ", e);
       setUser(null);
       setProfile(null);
       setLoading(false);
     }
-    return () => unsub && unsub();
+    return () => {
+      if (unsubAuth) unsubAuth();
+      if (unsubProfile) unsubProfile();
+    };
   }, []);
 
   const value = useMemo<AuthContextType>(

@@ -1,9 +1,9 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { LogIn, LogOut } from "lucide-react";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 
 const baseNavItems = [
   { to: "/", label: "Home" },
@@ -48,10 +48,29 @@ export function Header() {
         <div className="flex items-center gap-2">
           <ThemeToggle />
           {user ? (
-            <Button variant="ghost" onClick={() => signOut()} title="Sign out">
-              <LogOut />
-              <span className="hidden sm:inline">Sign out</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <div className="hidden sm:flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-sm">
+                <span
+                  className="max-w-[12rem] truncate"
+                  title={profile?.name || profile?.email || undefined}
+                >
+                  {profile?.name || profile?.email || "Account"}
+                </span>
+                <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
+                  {typeof profile?.totalSearchesRemaining === "number"
+                    ? profile.totalSearchesRemaining
+                    : 0}
+                </span>
+              </div>
+              <Button
+                variant="ghost"
+                onClick={() => signOut()}
+                title="Sign out"
+              >
+                <LogOut />
+                <span className="hidden sm:inline">Sign out</span>
+              </Button>
+            </div>
           ) : (
             <Button onClick={() => navigate("/auth")} title="Sign in">
               <LogIn />
