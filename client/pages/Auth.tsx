@@ -8,7 +8,6 @@ export default function AuthPage() {
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [error, setError] = useState<string | null>(null);
 
-
   return (
     <Layout>
       <section className="container mx-auto py-12">
@@ -60,7 +59,9 @@ export default function AuthPage() {
                   d="M43.611,20.083H42V20H24v8h11.303c-1.083,3.163-3.313,5.658-6.146,7.043l0.001-0.001l6.146,5.195  C33.707,41.637,44,36,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                 />
               </svg>
-              {mode === "signin" ? "Sign in with Google" : "Sign up with Google"}
+              {mode === "signin"
+                ? "Sign in with Google"
+                : "Sign up with Google"}
             </Button>
           </div>
         </div>

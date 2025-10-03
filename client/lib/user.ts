@@ -44,7 +44,9 @@ async function findUniqueUsername(base: string): Promise<string> {
   while (true) {
     const q = collection(_db, "users");
     const { getDocs, where, query, limit } = await import("firebase/firestore");
-    const snap = await getDocs(query(q, where("username", "==", candidate), limit(1)));
+    const snap = await getDocs(
+      query(q, where("username", "==", candidate), limit(1)),
+    );
     if (snap.empty) return candidate;
     i += 1;
     candidate = `${base}${i}`;
@@ -59,7 +61,9 @@ function cryptoRandomSuffix() {
     (globalThis.crypto || (window as any).crypto).getRandomValues(arr);
     return (arr[0] % 100000).toString().padStart(5, "0");
   } catch {
-    return Math.floor(Math.random() * 100000).toString().padStart(5, "0");
+    return Math.floor(Math.random() * 100000)
+      .toString()
+      .padStart(5, "0");
   }
 }
 

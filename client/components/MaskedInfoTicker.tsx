@@ -34,7 +34,10 @@ export default function MaskedInfoTicker({
   interval?: number;
   className?: string;
 }) {
-  const list = useMemo(() => (items && items.length ? items : SAMPLE_LINES), [items]);
+  const list = useMemo(
+    () => (items && items.length ? items : SAMPLE_LINES),
+    [items],
+  );
   const index = useCycler(list, interval);
   const lastIndex = useRef(index);
   const direction = useMemo(() => {
@@ -56,9 +59,17 @@ export default function MaskedInfoTicker({
         <AnimatePresence initial={false} mode="wait">
           <motion.div
             key={index}
-            initial={{ x: direction > 0 ? -40 : 40, opacity: 0, rotateY: direction > 0 ? 12 : -12 }}
+            initial={{
+              x: direction > 0 ? -40 : 40,
+              opacity: 0,
+              rotateY: direction > 0 ? 12 : -12,
+            }}
             animate={{ x: 0, opacity: 1, rotateY: 0 }}
-            exit={{ x: direction > 0 ? 40 : -40, opacity: 0, rotateY: direction > 0 ? -12 : 12 }}
+            exit={{
+              x: direction > 0 ? 40 : -40,
+              opacity: 0,
+              rotateY: direction > 0 ? -12 : 12,
+            }}
             transition={{ type: "spring", stiffness: 300, damping: 26 }}
             className="absolute inset-0 flex items-center justify-center text-[13px] md:text-sm font-semibold tracking-wide text-brand-700 dark:text-brand-300"
           >

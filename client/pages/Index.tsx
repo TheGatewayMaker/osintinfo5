@@ -26,7 +26,8 @@ export default function Index() {
               Domains, Keywords…
             </p>
             <p className="mt-2 text-sm text-foreground/60">
-              Privacy-first search. We don’t store queries. Try emails, phones, usernames, IPs, or domains.
+              Privacy-first search. We don’t store queries. Try emails, phones,
+              usernames, IPs, or domains.
             </p>
             <div className="mt-10 grid gap-4">
               <div className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur p-2 md:p-3">
