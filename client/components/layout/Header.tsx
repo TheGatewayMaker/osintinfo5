@@ -65,16 +65,23 @@ export function Header() {
                     className="hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-sm hover:bg-accent"
                     title="Searches remaining"
                   >
-                    <span className="max-w-[12rem] truncate" title={profile?.name || profile?.email || undefined}>
+                    <span
+                      className="max-w-[12rem] truncate"
+                      title={profile?.name || profile?.email || undefined}
+                    >
                       {profile?.name || profile?.email || "Account"}
                     </span>
                     <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
-                      {typeof profile?.totalSearchesRemaining === "number" ? profile.totalSearchesRemaining : 0}
+                      {typeof profile?.totalSearchesRemaining === "number"
+                        ? profile.totalSearchesRemaining
+                        : 0}
                     </span>
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem onSelect={() => navigate("/shop")}>Increase searches</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => navigate("/shop")}>
+                    Increase searches
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
 

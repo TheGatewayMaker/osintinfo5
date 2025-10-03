@@ -17,15 +17,21 @@ export default function Shop() {
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,theme(colors.brand.500/10),transparent_50%)]" />
         <div className="container mx-auto">
           <div className="text-center mb-10">
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight">Shop</h1>
+            <h1 className="text-3xl md:text-4xl font-black tracking-tight">
+              Shop
+            </h1>
             <p className="mt-2 text-foreground/70 max-w-2xl mx-auto">
-              Choose a searches package to increase your remaining searches instantly after purchase.
+              Choose a searches package to increase your remaining searches
+              instantly after purchase.
             </p>
           </div>
 
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {PLANS.map((p) => (
-              <Card key={p.searches} className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
+              <Card
+                key={p.searches}
+                className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur"
+              >
                 <CardHeader className="text-center">
                   <CardTitle className="text-2xl">
                     {p.searches} searches
@@ -34,13 +40,16 @@ export default function Shop() {
                 <CardContent>
                   <div className="grid gap-2 text-center text-foreground/80">
                     <div>
-                      <span className="font-semibold">{p.prices.inr}</span> <span className="text-foreground/60">/ INR</span>
+                      <span className="font-semibold">{p.prices.inr}</span>{" "}
+                      <span className="text-foreground/60">/ INR</span>
                     </div>
                     <div>
-                      <span className="font-semibold">{p.prices.pkr}</span> <span className="text-foreground/60">/ PKR</span>
+                      <span className="font-semibold">{p.prices.pkr}</span>{" "}
+                      <span className="text-foreground/60">/ PKR</span>
                     </div>
                     <div>
-                      <span className="font-semibold">{p.prices.usd}</span> <span className="text-foreground/60">/ USD</span>
+                      <span className="font-semibold">{p.prices.usd}</span>{" "}
+                      <span className="text-foreground/60">/ USD</span>
                     </div>
                   </div>
                 </CardContent>
