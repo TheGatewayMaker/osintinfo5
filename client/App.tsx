@@ -13,6 +13,8 @@ import About from "./pages/About";
 import Databases from "./pages/Databases";
 import Shop from "./pages/Shop";
 import AuthPage from "./pages/Auth";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
 import { AuthProvider } from "@/context/AuthContext";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,8 @@ const App = () => (
             <Route path="/contact" element={<Contact />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/auth" element={<AuthPage />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/terms" element={<Terms />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
