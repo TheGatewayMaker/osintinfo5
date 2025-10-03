@@ -2,8 +2,16 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
-import { LogIn, LogOut } from "lucide-react";
+import { LogIn } from "lucide-react";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { User as UserIcon } from "lucide-react";
 
 const baseNavItems = [
   { to: "/", label: "Home" },
@@ -14,7 +22,7 @@ const baseNavItems = [
 ];
 
 export function Header() {
-  const { user, signOut, profile } = useAuth();
+  const { user, profile } = useAuth();
   const navItems =
     profile?.role === "admin"
       ? [...baseNavItems, { to: "/admin", label: "Admin" }]
@@ -45,31 +53,45 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <ThemeToggle />
+
           {user ? (
-            <div className="flex items-center gap-2">
-              <div className="hidden sm:flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-sm">
-                <span
-                  className="max-w-[12rem] truncate"
-                  title={profile?.name || profile?.email || undefined}
-                >
-                  {profile?.name || profile?.email || "Account"}
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
-                  {typeof profile?.totalSearchesRemaining === "number"
-                    ? profile.totalSearchesRemaining
-                    : 0}
-                </span>
-              </div>
-              <Button
-                variant="ghost"
-                onClick={() => signOut()}
-                title="Sign out"
-              >
-                <LogOut />
-                <span className="hidden sm:inline">Sign out</span>
-              </Button>
+            <div className="flex items-center gap-3">
+              {/* Remaining searches pill with dropdown */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button
+                    className="hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-sm hover:bg-accent"
+                    title="Searches remaining"
+                  >
+                    <span
+                      className="max-w-[12rem] truncate"
+                      title={profile?.name || profile?.email || undefined}
+                    >
+                      {profile?.name || profile?.email || "Account"}
+                    </span>
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
+                      {typeof profile?.totalSearchesRemaining === "number"
+                        ? profile.totalSearchesRemaining
+                        : 0}
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onSelect={() => navigate("/shop")}>
+                    Increase searches
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              {/* Non-clickable user avatar */}
+              <Avatar className="h-9 w-9 select-none">
+                <AvatarImage src={user.photoURL || undefined} alt="User" />
+                <AvatarFallback>
+                  <UserIcon className="h-5 w-5 opacity-70" />
+                </AvatarFallback>
+              </Avatar>
             </div>
           ) : (
             <Button onClick={() => navigate("/auth")} title="Sign in">
@@ -77,6 +99,7 @@ export function Header() {
               <span className="hidden sm:inline">Sign in</span>
             </Button>
           )}
+
           <button
             className="md:hidden ml-2 inline-flex items-center justify-center rounded-md p-2 hover:bg-accent"
             onClick={() => setOpen((o) => !o)}

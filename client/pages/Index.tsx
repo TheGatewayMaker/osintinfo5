@@ -35,7 +35,7 @@ export default function Index() {
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Enter an email, phone, IP, domain, keyword…"
-                  className="w-full rounded-xl bg-transparent px-4 py-4 text-lg outline-none"
+                  className="w-full h-11 md:h-12 rounded-xl bg-transparent px-4 text-base outline-none"
                 />
               </div>
               <Button
