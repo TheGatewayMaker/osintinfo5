@@ -85,7 +85,14 @@ export default function AuthPage() {
           <Button
             variant="secondary"
             className="w-full bg-white text-black hover:opacity-90 border border-border dark:bg-white dark:text-black flex items-center justify-center gap-2"
-            onClick={() => signInWithGoogle()}
+            onClick={async () => {
+              setError(null);
+              try {
+                await signInWithGoogle();
+              } catch (e: any) {
+                setError(e?.message || "Google sign-in failed");
+              }
+            }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
