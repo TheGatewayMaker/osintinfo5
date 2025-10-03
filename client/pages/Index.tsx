@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/layout/Layout";
-import MaskedInfoTicker from "@/components/MaskedInfoTicker";
 
 export default function Index() {
   const [query, setQuery] = useState("");
@@ -44,7 +43,6 @@ export default function Index() {
               >
                 Search
               </Button>
-              <MaskedInfoTicker className="mt-2" />
               <p className="text-xs text-foreground/60">
                 1 request/second per IP. Complex queries may take longer.
               </p>
