@@ -29,17 +29,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (u) => {
-      setUser(u);
-      if (u) {
-        const p = await ensureUserDoc(u.uid, u.email, u.displayName);
-        setProfile(p);
-      } else {
-        setProfile(null);
-      }
+    let unsub: (() => void) | undefined;
+    try {
+      const _auth = getAuthInstance();
+      unsub = onAuthStateChanged(_auth, async (u) => {
+        setUser(u);
+        if (u) {
+          const p = await ensureUserDoc(u.uid, u.email, u.displayName);
+          setProfile(p);
+        } else {
+          setProfile(null);
+        }
+        setLoading(false);
+      });
+    } catch (e) {
+      // Firebase not configured; keep app usable in read-only mode
+      console.warn("Auth disabled: ", e);
+      setUser(null);
+      setProfile(null);
       setLoading(false);
-    });
-    return () => unsub();
+    }
+    return () => unsub && unsub();
   }, []);
 
   const value = useMemo<AuthContextType>(
@@ -48,20 +58,24 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       profile,
       loading,
       async signIn(email, password) {
-        await signInWithEmailAndPassword(auth, email, password);
+        const _auth = getAuthInstance();
+        await signInWithEmailAndPassword(_auth, email, password);
       },
       async signUp(name, email, password) {
-        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const _auth = getAuthInstance();
+        const cred = await createUserWithEmailAndPassword(_auth, email, password);
         if (cred.user && name) {
           await updateProfile(cred.user, { displayName: name });
         }
         await ensureUserDoc(cred.user!.uid, cred.user!.email, name);
       },
       async signInWithGoogle() {
-        await signInWithPopup(auth, googleProvider);
+        const _auth = getAuthInstance();
+        await signInWithPopup(_auth, getGoogleProvider());
       },
       async signOut() {
-        await fbSignOut(auth);
+        const _auth = getAuthInstance();
+        await fbSignOut(_auth);
       },
     }),
     [user, profile, loading],
