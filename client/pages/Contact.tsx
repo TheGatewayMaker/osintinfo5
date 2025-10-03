@@ -3,14 +3,14 @@ import Layout from "@/components/layout/Layout";
 export default function Contact() {
   return (
     <Layout>
-      <section className="container mx-auto py-12">
-        <h1 className="text-3xl font-bold">Contact</h1>
+      <section className="container mx-auto py-12 text-center">
+        <h1 className="text-3xl md:text-4xl font-black">Contact</h1>
         <p className="mt-2 text-foreground/70">We usually respond within 24 hours.</p>
 
         <form
           action="https://formspree.io/f/mnngvokw"
           method="POST"
-          className="mt-8 grid gap-6 max-w-2xl"
+          className="mt-8 grid gap-6 max-w-2xl mx-auto rounded-2xl border border-border bg-card/80 p-6 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur"
         >
           <div className="grid md:grid-cols-2 gap-4">
             <div className="grid gap-2">
