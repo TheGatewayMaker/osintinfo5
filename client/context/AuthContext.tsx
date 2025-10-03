@@ -1,5 +1,9 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { getAuthInstance, getGoogleProvider, getDbInstance } from "@/lib/firebase";
+import {
+  getAuthInstance,
+  getGoogleProvider,
+  getDbInstance,
+} from "@/lib/firebase";
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,

@@ -185,7 +185,10 @@ function AssignByPurchaseId() {
         });
         setStatus("Searches added.");
       } else if (action === "deduct") {
-        const newRemaining = Math.max(0, (found.totalSearchesRemaining ?? 0) - amount);
+        const newRemaining = Math.max(
+          0,
+          (found.totalSearchesRemaining ?? 0) - amount,
+        );
         await updateDoc(ref, {
           usedSearches: increment(amount),
           totalSearchesRemaining: newRemaining,
@@ -222,7 +225,8 @@ function AssignByPurchaseId() {
     <div className="mt-8 rounded-2xl border border-border bg-card/80 p-4 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
       <h2 className="text-lg font-bold">Assign by Unique Purchase ID</h2>
       <p className="text-sm text-foreground/70 mt-1">
-        Enter a user's Unique Purchase ID to add, deduct, or set their search limit.
+        Enter a user's Unique Purchase ID to add, deduct, or set their search
+        limit.
       </p>
       <div className="mt-4 grid gap-3 md:grid-cols-5">
         <div className="md:col-span-2">
@@ -257,7 +261,11 @@ function AssignByPurchaseId() {
           />
         </div>
         <div className="flex items-end">
-          <Button onClick={apply} disabled={loading || !found} className="w-full">
+          <Button
+            onClick={apply}
+            disabled={loading || !found}
+            className="w-full"
+          >
             {loading ? "Working..." : "Apply"}
           </Button>
         </div>
@@ -279,7 +287,9 @@ function AssignByPurchaseId() {
             </div>
             <div>
               <div className="text-foreground/60">Purchase ID</div>
-              <div className="font-mono text-xs break-all">{found.uniquePurchaseId}</div>
+              <div className="font-mono text-xs break-all">
+                {found.uniquePurchaseId}
+              </div>
             </div>
             <div>
               <div className="text-foreground/60">Purchased</div>
@@ -287,7 +297,9 @@ function AssignByPurchaseId() {
             </div>
             <div>
               <div className="text-foreground/60">Remaining</div>
-              <div className="font-bold">{found.totalSearchesRemaining ?? 0}</div>
+              <div className="font-bold">
+                {found.totalSearchesRemaining ?? 0}
+              </div>
             </div>
           </div>
         </div>
