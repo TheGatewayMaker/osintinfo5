@@ -14,6 +14,7 @@ export type UserProfile = {
   uid: string;
   email: string | null;
   name: string | null;
+  role?: "user" | "admin";
   uniquePurchaseId: string;
   freeSearches: number;
   purchasedSearches: number;
