@@ -1,4 +1,4 @@
-import { db } from "./firebase";
+import { getDbInstance } from "./firebase";
 import {
   collection,
   doc,
@@ -23,12 +23,17 @@ export type UserProfile = {
   updatedAt?: unknown;
 };
 
+function db() {
+  return getDbInstance();
+}
+
 export async function ensureUserDoc(
   uid: string,
   email: string | null,
   name: string | null,
 ) {
-  const ref = doc(collection(db, "users"), uid);
+  const _db = db();
+  const ref = doc(collection(_db, "users"), uid);
   const snap = await getDoc(ref);
   if (!snap.exists()) {
     const uniquePurchaseId = uuidv4();
@@ -51,7 +56,8 @@ export async function ensureUserDoc(
 }
 
 export async function incrementPurchasedSearches(uid: string, amount: number) {
-  const ref = doc(db, "users", uid);
+  const _db = db();
+  const ref = doc(_db, "users", uid);
   await updateDoc(ref, {
     purchasedSearches: increment(amount),
     totalSearchesRemaining: increment(amount),
@@ -60,7 +66,8 @@ export async function incrementPurchasedSearches(uid: string, amount: number) {
 }
 
 export async function consumeSearchCredit(uid: string, count = 1) {
-  const ref = doc(db, "users", uid);
+  const _db = db();
+  const ref = doc(_db, "users", uid);
   await updateDoc(ref, {
     usedSearches: increment(count),
     totalSearchesRemaining: increment(-count),
