@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
   const [theme, setTheme] = useState<string>(() =>
-    typeof document !== "undefined" && document.documentElement.classList.contains("dark")
+    typeof document !== "undefined" &&
+    document.documentElement.classList.contains("dark")
       ? "dark"
       : "light",
   );

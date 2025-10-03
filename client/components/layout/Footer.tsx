@@ -6,10 +6,16 @@ export function Footer() {
           <span className="inline-block h-5 w-5 rounded bg-gradient-to-br from-brand-500 to-brand-700 shadow-brand-500/30 shadow" />
           <span>LeakWatch</span>
         </div>
-        <p className="text-center">© {new Date().getFullYear()} LeakWatch. All rights reserved.</p>
+        <p className="text-center">
+          © {new Date().getFullYear()} LeakWatch. All rights reserved.
+        </p>
         <div className="flex gap-4">
-          <a className="hover:text-foreground" href="/privacy">Privacy</a>
-          <a className="hover:text-foreground" href="/terms">Terms</a>
+          <a className="hover:text-foreground" href="/privacy">
+            Privacy
+          </a>
+          <a className="hover:text-foreground" href="/terms">
+            Terms
+          </a>
         </div>
       </div>
     </footer>

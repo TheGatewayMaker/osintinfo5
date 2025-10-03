@@ -22,7 +22,8 @@ export default function Index() {
               Check if your data has been leaked
             </h1>
             <p className="mt-4 text-lg text-foreground/70">
-              You can search Phone Numbers, Emails, Full Names, IP addresses, Domains, Keywords…
+              You can search Phone Numbers, Emails, Full Names, IP addresses,
+              Domains, Keywords…
             </p>
             <div className="mt-10 grid gap-4">
               <div className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur p-2 md:p-3">
@@ -39,7 +40,9 @@ export default function Index() {
               >
                 Search
               </Button>
-              <p className="text-xs text-foreground/60">1 request/second per IP. Complex queries may take longer.</p>
+              <p className="text-xs text-foreground/60">
+                1 request/second per IP. Complex queries may take longer.
+              </p>
             </div>
           </div>
         </div>
@@ -48,11 +51,23 @@ export default function Index() {
       <section className="container mx-auto pb-16">
         <div className="grid md:grid-cols-3 gap-6 text-center">
           {[
-            { title: "Secure", desc: "Modern security best-practices with auth and role-based access." },
-            { title: "Accurate", desc: "Aggregated breach indexes for reliable results." },
-            { title: "Fast", desc: "Optimized queries and caching for snappy performance." },
+            {
+              title: "Secure",
+              desc: "Modern security best-practices with auth and role-based access.",
+            },
+            {
+              title: "Accurate",
+              desc: "Aggregated breach indexes for reliable results.",
+            },
+            {
+              title: "Fast",
+              desc: "Optimized queries and caching for snappy performance.",
+            },
           ].map((f) => (
-            <div key={f.title} className="rounded-xl border border-border bg-card/80 p-6 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
+            <div
+              key={f.title}
+              className="rounded-xl border border-border bg-card/80 p-6 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur"
+            >
               <h3 className="font-bold text-lg">{f.title}</h3>
               <p className="mt-2 text-sm text-foreground/70">{f.desc}</p>
             </div>

@@ -4,17 +4,24 @@ const lastRequestPerIp = new Map<string, number>();
 
 export const handleLeakSearch: RequestHandler = async (req, res) => {
   const now = Date.now();
-  const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "unknown";
+  const ip =
+    (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
+    req.socket.remoteAddress ||
+    "unknown";
   const last = lastRequestPerIp.get(ip) ?? 0;
   if (now - last < 1000) {
-    res.status(429).json({ error: "Rate limit exceeded. Max 1 request per second per IP." });
+    res
+      .status(429)
+      .json({ error: "Rate limit exceeded. Max 1 request per second per IP." });
     return;
   }
   lastRequestPerIp.set(ip, now);
 
   const token = process.env.LEAKOSINT_API_KEY;
   if (!token) {
-    res.status(500).json({ error: "Server not configured. Missing LEAKOSINT_API_KEY." });
+    res
+      .status(500)
+      .json({ error: "Server not configured. Missing LEAKOSINT_API_KEY." });
     return;
   }
 

@@ -15,7 +15,10 @@ const baseNavItems = [
 
 export function Header() {
   const { user, signOut, profile } = useAuth();
-  const navItems = profile?.role === "admin" ? [...baseNavItems, { to: "/admin", label: "Admin" }] : baseNavItems;
+  const navItems =
+    profile?.role === "admin"
+      ? [...baseNavItems, { to: "/admin", label: "Admin" }]
+      : baseNavItems;
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -60,8 +63,18 @@ export function Header() {
             onClick={() => setOpen((o) => !o)}
             aria-label="Toggle navigation"
           >
-            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+            <svg
+              className="h-6 w-6"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M4 6h16M4 12h16M4 18h16"
+              />
             </svg>
           </button>
         </div>

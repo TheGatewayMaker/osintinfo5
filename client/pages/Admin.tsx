@@ -21,7 +21,14 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 export default function Admin() {
   const { user, profile } = useAuth();
@@ -32,7 +39,9 @@ export default function Admin() {
     const db = getDbInstance();
     const q = query(collection(db, "users"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snap) => {
-      const arr = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) } as UserProfile));
+      const arr = snap.docs.map(
+        (d) => ({ id: d.id, ...(d.data() as any) }) as UserProfile,
+      );
       setUsers(arr);
     });
     return () => unsub();
@@ -58,7 +67,9 @@ export default function Admin() {
       <Layout>
         <section className="container mx-auto py-12 text-center">
           <h1 className="text-3xl font-black">Admins only</h1>
-          <p className="mt-2 text-foreground/70">Sign in with an admin account.</p>
+          <p className="mt-2 text-foreground/70">
+            Sign in with an admin account.
+          </p>
         </section>
       </Layout>
     );
@@ -69,7 +80,9 @@ export default function Admin() {
       <Layout>
         <section className="container mx-auto py-12 text-center">
           <h1 className="text-3xl font-black">Access denied</h1>
-          <p className="mt-2 text-foreground/70">Your account does not have admin privileges.</p>
+          <p className="mt-2 text-foreground/70">
+            Your account does not have admin privileges.
+          </p>
         </section>
       </Layout>
     );
@@ -80,7 +93,9 @@ export default function Admin() {
       <section className="container mx-auto py-8">
         <div className="text-center">
           <h1 className="text-3xl md:text-4xl font-black">Admin Dashboard</h1>
-          <p className="mt-2 text-foreground/70">Manage users and balances in real time.</p>
+          <p className="mt-2 text-foreground/70">
+            Manage users and balances in real time.
+          </p>
         </div>
 
         <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -133,23 +148,66 @@ function UsersTable({ users }: { users: UserProfile[] }) {
               <TableCell>{u.freeSearches ?? 0}</TableCell>
               <TableCell>{u.purchasedSearches ?? 0}</TableCell>
               <TableCell>{u.usedSearches ?? 0}</TableCell>
-              <TableCell className="font-bold">{u.totalSearchesRemaining ?? 0}</TableCell>
+              <TableCell className="font-bold">
+                {u.totalSearchesRemaining ?? 0}
+              </TableCell>
               <TableCell className="space-x-2">
-                <Button size="sm" onClick={() => { setTarget(u); setMode("add"); }}>Add</Button>
-                <Button size="sm" variant="secondary" onClick={() => { setTarget(u); setMode("deduct"); }}>Deduct</Button>
-                <Button size="sm" variant="outline" onClick={() => { setTarget(u); setMode("resetFree"); }}>Reset Free</Button>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    setTarget(u);
+                    setMode("add");
+                  }}
+                >
+                  Add
+                </Button>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    setTarget(u);
+                    setMode("deduct");
+                  }}
+                >
+                  Deduct
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setTarget(u);
+                    setMode("resetFree");
+                  }}
+                >
+                  Reset Free
+                </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
 
-      <AdjustModal user={target} mode={mode} onClose={() => { setTarget(null); setMode(null); }} />
+      <AdjustModal
+        user={target}
+        mode={mode}
+        onClose={() => {
+          setTarget(null);
+          setMode(null);
+        }}
+      />
     </div>
   );
 }
 
-function AdjustModal({ user, mode, onClose }: { user: UserProfile | null; mode: "add" | "deduct" | "resetFree" | null; onClose: () => void }) {
+function AdjustModal({
+  user,
+  mode,
+  onClose,
+}: {
+  user: UserProfile | null;
+  mode: "add" | "deduct" | "resetFree" | null;
+  onClose: () => void;
+}) {
   const [amount, setAmount] = useState(0);
   const [loading, setLoading] = useState(false);
 
@@ -167,13 +225,16 @@ function AdjustModal({ user, mode, onClose }: { user: UserProfile | null; mode: 
           totalSearchesRemaining: newRemaining,
         });
       } else if (mode === "deduct") {
-        const newRemaining = Math.max(0, (user.totalSearchesRemaining ?? 0) - amount);
+        const newRemaining = Math.max(
+          0,
+          (user.totalSearchesRemaining ?? 0) - amount,
+        );
         await updateDoc(ref, {
           usedSearches: increment(amount),
           totalSearchesRemaining: newRemaining,
         });
       } else if (mode === "resetFree") {
-        const delta = (3 - (user.freeSearches ?? 0));
+        const delta = 3 - (user.freeSearches ?? 0);
         const newRemaining = (user.totalSearchesRemaining ?? 0) + delta;
         await updateDoc(ref, {
           freeSearches: 3,
@@ -201,12 +262,21 @@ function AdjustModal({ user, mode, onClose }: { user: UserProfile | null; mode: 
         {mode !== "resetFree" && (
           <div className="grid gap-2">
             <label className="text-sm">Amount</label>
-            <Input type="number" min={1} value={amount} onChange={(e) => setAmount(parseInt(e.target.value || "0", 10))} />
+            <Input
+              type="number"
+              min={1}
+              value={amount}
+              onChange={(e) => setAmount(parseInt(e.target.value || "0", 10))}
+            />
           </div>
         )}
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={apply} disabled={loading}>{loading ? "Saving..." : "Confirm"}</Button>
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button onClick={apply} disabled={loading}>
+            {loading ? "Saving..." : "Confirm"}
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
