@@ -105,6 +105,8 @@ export default function Admin() {
           <StatCard title="Remaining" value={stats.remaining} />
         </div>
 
+        <AssignByPurchaseId />
+
         <div className="mt-8 rounded-2xl border border-border bg-card/80 p-4 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
           <UsersTable users={users} />
         </div>
