@@ -18,14 +18,14 @@ export default function Index() {
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top,theme(colors.brand.500/10),transparent_50%)]" />
         <div className="container mx-auto">
           <div className="mx-auto max-w-3xl text-center">
-            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight">
+            <h1 className="text-4xl md:text-6xl font-black tracking-tight">
               Check if your data has been leaked
             </h1>
             <p className="mt-4 text-lg text-foreground/70">
               You can search Phone Numbers, Emails, Full Names, IP addresses, Domains, Keywords…
             </p>
             <div className="mt-10 grid gap-4">
-              <div className="rounded-2xl border border-border bg-card shadow-sm p-2 md:p-3">
+              <div className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur p-2 md:p-3">
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
@@ -35,7 +35,7 @@ export default function Index() {
               </div>
               <Button
                 onClick={onSearch}
-                className="h-14 text-base rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 hover:from-brand-600 hover:to-brand-800 transition-transform hover:scale-[1.02]"
+                className="h-14 text-base rounded-xl hover:scale-[1.02]"
               >
                 Search
               </Button>
@@ -46,14 +46,14 @@ export default function Index() {
       </section>
 
       <section className="container mx-auto pb-16">
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-6 text-center">
           {[
             { title: "Secure", desc: "Modern security best-practices with auth and role-based access." },
             { title: "Accurate", desc: "Aggregated breach indexes for reliable results." },
             { title: "Fast", desc: "Optimized queries and caching for snappy performance." },
           ].map((f) => (
-            <div key={f.title} className="rounded-xl border border-border bg-card p-6 shadow-sm">
-              <h3 className="font-semibold text-lg">{f.title}</h3>
+            <div key={f.title} className="rounded-xl border border-border bg-card/80 p-6 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur">
+              <h3 className="font-bold text-lg">{f.title}</h3>
               <p className="mt-2 text-sm text-foreground/70">{f.desc}</p>
             </div>
           ))}
