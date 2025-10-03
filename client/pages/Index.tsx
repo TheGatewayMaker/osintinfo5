@@ -25,18 +25,22 @@ export default function Index() {
               You can search Phone Numbers, Emails, Full Names, IP addresses,
               Domains, Keywords…
             </p>
+            <p className="mt-2 text-sm text-foreground/60">
+              Privacy-first search. We don’t store queries. Try emails, phones,
+              usernames, IPs, or domains.
+            </p>
             <div className="mt-10 grid gap-4">
               <div className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur p-2 md:p-3">
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Enter an email, phone, IP, domain, keyword…"
-                  className="w-full rounded-xl bg-transparent px-4 py-5 text-lg outline-none"
+                  className="w-full rounded-xl bg-transparent px-4 py-4 text-lg outline-none"
                 />
               </div>
               <Button
                 onClick={onSearch}
-                className="h-14 text-base rounded-xl hover:scale-[1.02]"
+                className="h-12 text-base rounded-xl hover:scale-[1.02]"
               >
                 Search
               </Button>
