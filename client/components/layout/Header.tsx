@@ -5,7 +5,7 @@ import { useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { LogIn, LogOut } from "lucide-react";
 
-const navItems = [
+const baseNavItems = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/databases", label: "Databases" },
@@ -14,7 +14,8 @@ const navItems = [
 ];
 
 export function Header() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, profile } = useAuth();
+  const navItems = profile?.role === "admin" ? [...baseNavItems, { to: "/admin", label: "Admin" }] : baseNavItems;
   const location = useLocation();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
