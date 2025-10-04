@@ -41,13 +41,23 @@ export default function ReportPage() {
         <div className="rounded-2xl border border-border bg-card/80 p-6 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <div className="text-sm text-foreground/60">Osint Info Report</div>
+              <div className="text-sm text-foreground/60">
+                Osint Info Report
+              </div>
               <h1 className="text-2xl font-black mt-1">Query results</h1>
-              <p className="mt-1 text-foreground/70">Query: <span className="font-mono">{query}</span></p>
-              <p className="mt-1 text-sm text-foreground/60">Generated: {new Date().toLocaleString()}</p>
+              <p className="mt-1 text-foreground/70">
+                Query: <span className="font-mono">{query}</span>
+              </p>
+              <p className="mt-1 text-sm text-foreground/60">
+                Generated: {new Date().toLocaleString()}
+              </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button onClick={() => navigate(-1)} variant={"secondary"} className="h-10">
+              <Button
+                onClick={() => navigate(-1)}
+                variant={"secondary"}
+                className="h-10"
+              >
                 Back
               </Button>
               <Button onClick={downloadJson} className="h-10">
@@ -70,7 +80,9 @@ export default function ReportPage() {
             ) : (
               <div className="text-center py-12">
                 <p className="text-lg font-semibold">No results found</p>
-                <p className="mt-2 text-sm text-foreground/60">Try refining your query or check other data sources.</p>
+                <p className="mt-2 text-sm text-foreground/60">
+                  Try refining your query or check other data sources.
+                </p>
               </div>
             )}
           </div>
