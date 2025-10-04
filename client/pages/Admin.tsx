@@ -420,10 +420,10 @@ function AdjustModal({
           totalSearchesRemaining: newRemaining,
         });
       } else if (mode === "resetFree") {
-        const delta = 3 - (user.freeSearches ?? 0);
+        const delta = 2 - (user.freeSearches ?? 0);
         const newRemaining = (user.totalSearchesRemaining ?? 0) + delta;
         await updateDoc(ref, {
-          freeSearches: 3,
+          freeSearches: 2,
           totalSearchesRemaining: newRemaining,
         });
       }
@@ -442,7 +442,7 @@ function AdjustModal({
           <DialogTitle className="font-black">
             {mode === "add" && "Add searches"}
             {mode === "deduct" && "Deduct searches"}
-            {mode === "resetFree" && "Reset free to 3"}
+            {mode === "resetFree" && "Reset free to 2"}
           </DialogTitle>
         </DialogHeader>
         {mode !== "resetFree" && (
