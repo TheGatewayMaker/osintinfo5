@@ -16,6 +16,7 @@ import AuthPage from "./pages/Auth";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms";
 import Admin from "./pages/Admin";
+import Report from "./pages/Report";
 import { AuthProvider } from "@/context/AuthContext";
 
 const queryClient = new QueryClient();
