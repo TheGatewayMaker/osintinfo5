@@ -45,6 +45,24 @@ export default function Index() {
         data = await r.text();
       }
 
+      // determine if there are results and consume credit if so
+      const hasResults = Array.isArray(data)
+        ? data.length > 0
+        : data && typeof data === "object"
+          ? Object.keys(data).length > 0
+          : typeof data === "string"
+            ? data.trim().length > 0 && !/no results/i.test(data)
+            : false;
+
+      if (hasResults) {
+        try {
+          const { consumeSearchCredit } = await import("@/lib/user");
+          await consumeSearchCredit(user.uid, 1);
+        } catch (e) {
+          console.warn("Failed to deduct search credit:", e);
+        }
+      }
+
       navigate("/report", { state: { query: query.trim(), result: data } });
     } catch (e: any) {
       toast.error(e?.message || "Search error.");
