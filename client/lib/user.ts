@@ -89,10 +89,10 @@ export async function ensureUserDoc(
       username,
       role: "user",
       uniquePurchaseId,
-      freeSearches: 3,
+      freeSearches: 2,
       purchasedSearches: 0,
       usedSearches: 0,
-      totalSearchesRemaining: 3,
+      totalSearchesRemaining: 2,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };

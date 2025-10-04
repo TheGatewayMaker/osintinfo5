@@ -62,19 +62,22 @@ export function Header() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <button
-                    className="hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-card/70 px-3 py-1 text-sm hover:bg-accent"
+                    className="relative overflow-visible hidden sm:inline-flex items-center gap-2 rounded-full border border-border bg-card/80 px-3 py-1 text-sm hover:bg-accent shadow-[0_0_20px_rgba(234,179,8,0.35)] ring-1 ring-amber-400/50"
                     title="Searches remaining"
                   >
                     <span
-                      className="max-w-[12rem] truncate"
-                      title={profile?.name || profile?.email || undefined}
-                    >
-                      {profile?.name || profile?.email || "Account"}
-                    </span>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
-                      {typeof profile?.totalSearchesRemaining === "number"
-                        ? profile.totalSearchesRemaining
-                        : 0}
+                      aria-hidden
+                      className="pointer-events-none absolute -inset-0.5 rounded-full bg-[conic-gradient(from_0deg,rgba(251,191,36,0.25),rgba(245,158,11,0.6),rgba(217,119,6,0.5),rgba(251,191,36,0.25))] blur-md opacity-70 animate-[spin_6s_linear_infinite]"
+                    />
+                    <span className="relative z-10 inline-flex items-center gap-2">
+                      <span className="max-w-[12rem] truncate font-semibold">
+                        Balance
+                      </span>
+                      <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
+                        {typeof profile?.totalSearchesRemaining === "number"
+                          ? profile.totalSearchesRemaining
+                          : 0}
+                      </span>
                     </span>
                   </button>
                 </DropdownMenuTrigger>
