@@ -2,30 +2,22 @@ import Layout from "@/components/layout/Layout";
 import { useAuth } from "@/context/AuthContext";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 export default function AuthPage() {
-  const { signInWithGoogle, signIn, signUp } = useAuth();
-  const [mode, setMode] = useState<"signin" | "signup">("signin");
+  const { signInWithGoogle } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleGoogle() {
     setError(null);
     setLoading(true);
     try {
-      if (mode === "signin") {
-        await signIn(email, password);
-      } else {
-        await signUp(name, email, password);
-      }
+      await signInWithGoogle();
     } catch (err: any) {
-      setError(err?.message || "Authentication failed");
+      setError(
+        err?.message ||
+          "Unable to continue with Google right now. Please try again later.",
+      );
     } finally {
       setLoading(false);
     }
@@ -38,100 +30,21 @@ export default function AuthPage() {
         <div className="container mx-auto">
           <div className="mx-auto max-w-md">
             <div className="text-center mb-6">
-              <h1 className="text-3xl font-black tracking-tight">
-                {mode === "signin" ? "Welcome back" : "Create your account"}
-              </h1>
+              <h1 className="text-3xl font-black tracking-tight">Sign in</h1>
               <p className="mt-2 text-sm text-foreground/60">
-                {mode === "signin"
-                  ? "Sign in to continue your searches"
-                  : "Sign up to start searching securely"}
+                Continue securely with your Google account
               </p>
             </div>
 
             <div className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur p-6">
-              <div className="flex justify-center mb-5">
-                <div className="inline-flex rounded p-1 bg-accent">
-                  <button
-                    onClick={() => setMode("signin")}
-                    className={`px-3 py-1 rounded ${mode === "signin" ? "bg-background shadow" : ""}`}
-                  >
-                    Sign in
-                  </button>
-                  <button
-                    onClick={() => setMode("signup")}
-                    className={`px-3 py-1 rounded ${mode === "signup" ? "bg-background shadow" : ""}`}
-                  >
-                    Sign up
-                  </button>
-                </div>
-              </div>
-
-              {error && <p className="mb-3 text-sm text-red-500">{error}</p>}
-
-              <form onSubmit={onSubmit} className="grid gap-4">
-                {mode === "signup" && (
-                  <div className="grid gap-2">
-                    <Label htmlFor="name">Name</Label>
-                    <Input
-                      id="name"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      placeholder="Your full name"
-                      required
-                    />
-                  </div>
-                )}
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="you@example.com"
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-                <Button
-                  type="submit"
-                  disabled={loading}
-                  className="h-11 rounded-xl"
-                >
-                  {loading
-                    ? "Please wait…"
-                    : mode === "signin"
-                      ? "Sign in"
-                      : "Sign up"}
-                </Button>
-              </form>
-
-              <div className="relative my-5">
-                <div className="absolute inset-0 flex items-center">
-                  <span className="w-full border-t" />
-                </div>
-                <div className="relative flex justify-center text-xs uppercase">
-                  <span className="bg-card px-2 text-muted-foreground">
-                    Or continue with
-                  </span>
-                </div>
-              </div>
+              {error && <p className="mb-4 text-sm text-red-500">{error}</p>}
 
               <div className="grid gap-3">
                 <Button
                   variant="secondary"
                   className="w-full bg-white text-black hover:opacity-90 border border-border dark:bg-white dark:text-black flex items-center justify-center gap-2 h-11 rounded-xl"
-                  onClick={() => signInWithGoogle()}
+                  onClick={handleGoogle}
+                  disabled={loading}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -156,10 +69,12 @@ export default function AuthPage() {
                       d="M43.611,20.083H42V20H24v8h11.303c-1.083,3.163-3.313,5.658-6.146,7.043l0.001-0.001l6.146,5.195  C33.707,41.637,44,36,44,24C44,22.659,43.862,21.35,43.611,20.083z"
                     />
                   </svg>
-                  {mode === "signin"
-                    ? "Sign in with Google"
-                    : "Sign up with Google"}
+                  {loading ? "Please wait…" : "Continue with Google"}
                 </Button>
+                <p className="text-xs text-foreground/60 text-center">
+                  Email/password sign-in is disabled. Use Google to access your
+                  account.
+                </p>
               </div>
             </div>
           </div>

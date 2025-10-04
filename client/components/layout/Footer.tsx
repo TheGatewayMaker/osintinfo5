@@ -4,10 +4,10 @@ export function Footer() {
       <div className="container mx-auto py-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-foreground/70 text-center">
         <div className="flex items-center gap-2 font-semibold">
           <span className="inline-block h-5 w-5 rounded bg-gradient-to-br from-brand-500 to-brand-700 shadow-brand-500/30 shadow" />
-          <span>LeakWatch</span>
+          <span>Osint Info</span>
         </div>
         <p className="text-center">
-          © {new Date().getFullYear()} LeakWatch. All rights reserved.
+          © {new Date().getFullYear()} Osint Info. All rights reserved.
         </p>
         <div className="flex gap-4">
           <a className="hover:text-foreground" href="/privacy">

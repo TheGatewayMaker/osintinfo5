@@ -36,7 +36,7 @@ export function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2 font-black text-xl">
           <span className="inline-block h-6 w-6 rounded bg-gradient-to-br from-brand-500 to-brand-700 shadow-md shadow-brand-500/30" />
-          LeakWatch
+          Osint Info
         </Link>
 
         <nav className="hidden md:flex items-center gap-6">
