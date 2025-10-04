@@ -70,7 +70,9 @@ export function Header() {
                       className="pointer-events-none absolute -inset-0.5 rounded-full bg-[conic-gradient(from_0deg,rgba(251,191,36,0.25),rgba(245,158,11,0.6),rgba(217,119,6,0.5),rgba(251,191,36,0.25))] blur-md opacity-70 animate-[spin_6s_linear_infinite]"
                     />
                     <span className="relative z-10 inline-flex items-center gap-2">
-                      <span className="max-w-[12rem] truncate font-semibold">Balance</span>
+                      <span className="max-w-[12rem] truncate font-semibold">
+                        Balance
+                      </span>
                       <span className="inline-flex items-center gap-1 rounded-full bg-brand-500/10 text-brand-700 dark:text-brand-300 px-2 py-0.5 text-xs font-semibold">
                         {typeof profile?.totalSearchesRemaining === "number"
                           ? profile.totalSearchesRemaining
