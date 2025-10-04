@@ -1,15 +1,54 @@
+import Layout from "@/components/layout/Layout";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
-import Layout from "@/components/layout/Layout";
+import { useAuth } from "@/context/AuthContext";
+import { toast } from "sonner";
 
 export default function Index() {
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+  const { user, profile } = useAuth();
 
-  function onSearch() {
+  async function onSearch() {
     if (!query.trim()) return;
-    navigate(`/databases?q=${encodeURIComponent(query.trim())}`);
+    if (!user) {
+      toast.error("Please sign in to search.");
+      navigate("/auth");
+      return;
+    }
+
+    const remaining = profile?.totalSearchesRemaining ?? 0;
+    if (!Number.isFinite(remaining) || remaining <= 0) {
+      toast.error("No searches remaining. Please purchase more.");
+      navigate("/shop");
+      return;
+    }
+
+    try {
+      const r = await fetch("/api/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: query.trim() }),
+      });
+      const contentType = r.headers.get("content-type") || "";
+      if (!r.ok) {
+        const text = await r.text();
+        toast.error(text || `Search failed (${r.status}).`);
+        return;
+      }
+      let data: any = null;
+      if (contentType.includes("application/json")) {
+        data = await r.json();
+      } else {
+        data = await r.text();
+      }
+
+      navigate("/report", { state: { query: query.trim(), result: data } });
+    } catch (e: any) {
+      toast.error(e?.message || "Search error.");
+    }
   }
 
   return (
@@ -31,11 +70,14 @@ export default function Index() {
             </p>
             <div className="mt-10 grid gap-4">
               <div className="rounded-2xl border border-border bg-card/80 shadow-lg shadow-brand-500/10 ring-1 ring-brand-500/10 backdrop-blur p-2 md:p-3">
-                <input
+                <Input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
                   placeholder="Enter an email, phone, IP, domain, keyword…"
                   className="w-full h-11 md:h-12 rounded-xl bg-transparent px-4 text-base outline-none"
+                  onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                    if (e.key === "Enter") onSearch();
+                  }}
                 />
               </div>
               <Button
